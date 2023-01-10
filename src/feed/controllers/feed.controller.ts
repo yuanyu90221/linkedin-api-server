@@ -18,6 +18,7 @@ import { FeedService } from '../services/feed.service';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { Role } from '../../auth/models/role.enum';
 import { RolesGuard } from '../../auth/guards/roles.guard';
+import { IsCreatorGuard } from '../guards/is-creator.guard';
 
 @Controller('feed')
 export class FeedController {
@@ -36,6 +37,7 @@ export class FeedController {
     take = take > 20 ? 20 : take;
     return this.feedService.findPosts(take, skip);
   }
+  @UseGuards(JwtGuard, IsCreatorGuard)
   @Put(':id')
   update(
     @Param('id') id: number,
@@ -43,6 +45,7 @@ export class FeedController {
   ): Observable<UpdateResult> {
     return this.feedService.updatePost(id, feedPost);
   }
+  @UseGuards(JwtGuard, IsCreatorGuard)
   @Delete(':id')
   delete(@Param('id') id: number): Observable<DeleteResult> {
     return this.feedService.deletePost(id);

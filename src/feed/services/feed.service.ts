@@ -41,4 +41,12 @@ export class FeedService {
   deletePost(id: number): Observable<DeleteResult> {
     return from(this.feedPostRepository.delete(id));
   }
+  findPostById(id: number): Observable<FeedPost> {
+    return from(
+      this.feedPostRepository.findOne({
+        where: { id },
+        relations: ['author'],
+      }),
+    );
+  }
 }
